@@ -21,11 +21,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private UserRepository userRepository;
-    private ModelMapper modelMapper;
-    private JWTService jwtService;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final JWTService jwtService;
 
     public UserDTO signup(SignupRequestDTO signupRequestDTO) {
+
+        boolean exists = userRepository.existsByEmail(signupRequestDTO.getEmail());
+        if (exists) {
+            throw new BadRequestException("Email already exists");
+        }
+
         User user = modelMapper.map(signupRequestDTO, User.class);
         user.setPassword(PasswordUtil.hashPassword(signupRequestDTO.getPassword()));
         User savedUser = userRepository.save(user);
