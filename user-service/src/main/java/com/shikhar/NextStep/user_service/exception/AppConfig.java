@@ -1,4 +1,4 @@
-package com.shikhar.NextStep.user_service.config;
+package com.shikhar.NextStep.user_service.exception;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
