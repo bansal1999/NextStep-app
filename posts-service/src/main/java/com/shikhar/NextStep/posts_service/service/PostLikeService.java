@@ -22,18 +22,29 @@ public class PostLikeService {
         if (!exists) {
             throw new ResourceNotFoundException("Post " + postId + "is not found");
         }
-
         boolean alreadyLiked = postLikeRepository.existsByUserIdAndPostId(userId, postId);
         if (alreadyLiked) {
             throw new BadRequestException("Post " + postId + " already liked post");
         }
-
         PostLike postLike = new PostLike();
         postLike.setPostId(postId);
         postLike.setUserId(userId);
         postLikeRepository.save(postLike);
         log.info("Post with id: {} is liked", postId);
+    }
 
+    public void unlikePost(Long postId, Long userId) {
+        boolean exists = postsRepository.existsById(postId);
+        if (!exists) {
+            throw new ResourceNotFoundException("Post " + postId + "is not found");
+        }
+        boolean alreadyLiked = postLikeRepository.existsByUserIdAndPostId(userId, postId);
+        if (!alreadyLiked) {
+            throw new BadRequestException("Post " + postId + " cannot unlike post");
+        }
 
+        postLikeRepository.deleteByUserIdAndPostId(userId, postId);
+
+        log.info("Post with id: {} is unliked", postId);
     }
 }
