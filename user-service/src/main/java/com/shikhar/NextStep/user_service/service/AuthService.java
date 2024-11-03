@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
 
     private UserRepository userRepository;
