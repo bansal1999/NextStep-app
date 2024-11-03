@@ -3,6 +3,7 @@ package com.shikhar.NextStep.posts_service.service;
 import com.shikhar.NextStep.posts_service.dto.PostCreateRequestDTO;
 import com.shikhar.NextStep.posts_service.dto.PostDTO;
 import com.shikhar.NextStep.posts_service.entity.Post;
+import com.shikhar.NextStep.posts_service.exception.ResourceNotFoundException;
 import com.shikhar.NextStep.posts_service.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,4 +25,14 @@ public class PostsService {
         return modelMapper.map(savedPost, PostDTO.class);
 
     }
+
+    public PostDTO getPostById(Long postId) {
+        log.debug("Retrieving post with ID: {}", postId);
+
+        Post post = postsRepository.findById(postId).orElseThrow(() ->
+                new ResourceNotFoundException("No post with ID: " + postId));
+
+        return modelMapper.map(post, PostDTO.class);
+    }
+
 }
